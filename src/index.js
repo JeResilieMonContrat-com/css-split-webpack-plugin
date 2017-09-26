@@ -30,7 +30,7 @@ const nameInterpolator = (input) => ({file, content, index}) => {
     resourcePath: `/${file}`,
   }, input, {
     content,
-  }).replace(/\[part\]/g, index + 1);
+  }).replace(/\[part\]/g, typeof index !== "undefined" ? index + 1 : '');
   return res;
 };
 
