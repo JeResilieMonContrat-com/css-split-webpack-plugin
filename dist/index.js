@@ -119,7 +119,9 @@ var CSSSplitWebpackPlugin = function () {
         imports = _ref3$imports === undefined ? false : _ref3$imports,
         _ref3$filename = _ref3.filename,
         filename = _ref3$filename === undefined ? '[name]-[part].[ext]' : _ref3$filename,
-        preserve = _ref3.preserve;
+        preserve = _ref3.preserve,
+        _ref3$forceSingleFile = _ref3.forceSingleFile,
+        forceSingleFile = _ref3$forceSingleFile === undefined ? false : _ref3$forceSingleFile;
 
     _classCallCheck(this, CSSSplitWebpackPlugin);
 
@@ -127,7 +129,8 @@ var CSSSplitWebpackPlugin = function () {
       size: size,
       imports: normalizeImports(imports, preserve),
       filename: nameInterpolator(filename),
-      preserve: preserve
+      preserve: preserve,
+      forceSingleFile: forceSingleFile
     };
   }
 
@@ -204,6 +207,11 @@ var CSSSplitWebpackPlugin = function () {
                 // Skip the splitting operation for files that result in no
                 // split occuring.
                 if (entry.chunks.length === 1) {
+                  if (_this2.options.forceSingleFile) {
+
+                    var singleFile = _this2.options.imports(_extends({}, entry));
+                    assets[singleFile] = entry.chunks[0];
+                  }
                   return;
                 }
                 // Inject the new files into the chunk.

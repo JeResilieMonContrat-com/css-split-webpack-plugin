@@ -77,12 +77,14 @@ export default class CSSSplitWebpackPlugin {
     imports = false,
     filename = '[name]-[part].[ext]',
     preserve,
+    forceSingleFile = false,
   }) {
     this.options = {
       size,
       imports: normalizeImports(imports, preserve),
       filename: nameInterpolator(filename),
       preserve,
+      forceSingleFile,
     };
   }
 
@@ -146,6 +148,11 @@ export default class CSSSplitWebpackPlugin {
               // Skip the splitting operation for files that result in no
               // split occuring.
               if (entry.chunks.length === 1) {
+                if (this.options.forceSingleFile) {
+
+                  var singleFile = this.options.imports({...entry});
+                  assets[singleFile] = entry.chunks[0];
+                }
                 return;
               }
               // Inject the new files into the chunk.
